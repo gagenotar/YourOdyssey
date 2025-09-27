@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Vacation Planner{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 mb-4">Plan Your Perfect Vacation</h1>
+        <p class="lead mb-5">Discover amazing destinations with personalized itineraries, budgets, and real-time weather</p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-custom">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-map-marked-alt"></i> Plan Your Trip</h3>
+                </div>
+                <div class="card-body">
+                    <form id="tripPlanForm">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="destination" class="form-label">Destination</label>
+                                <input type="text" class="form-control" id="destination" name="destination"
+                                       placeholder="e.g., Paris, Tokyo, Rome" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="days" class="form-label">Days</label>
+                                <select class="form-select" id="days" name="days">
+                                    <option value="1">1 day</option>
+                                    <option value="2">2 days</option>
+                                    <option value="3" selected>3 days</option>
+                                    <option value="4">4 days</option>
+                                    <option value="5">5 days</option>
+                                    <option value="6">6 days</option>
+                                    <option value="7">7 days</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="budget_level" class="form-label">Budget</label>
+                                <select class="form-select" id="budget_level" name="budget_level">
+                                    <option value="low">Budget</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">Luxury</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-outline-info me-md-2" onclick="getWeather()">
+                                <i class="fas fa-cloud-sun"></i> Check Weather
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="planTrip()">
+                                <i class="fas fa-route"></i> Create Basic Plan
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="comprehensivePlan()">
+                                <i class="fas fa-star"></i> Comprehensive Plan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="row loading" id="loadingSpinner">
+        <div class="col-12 text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Planning your amazing trip...</p>
+        </div>
+    </div>
+
+    <!-- Results Container -->
+    <div id="resultsContainer"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+function showLoading() {
+    document.getElementById('loadingSpinner').style.display = 'block';
+    document.getElementById('resultsContainer').innerHTML = '';
+}
+
+function hideLoading() {
+    document.getElementById('loadingSpinner').style.display = 'none';
+}
+
+function getWeather() {
+    const destination = document.getElementById('destination').value;
+    if (!destination) {
+        alert('Please enter a destination first');
+        return;
+    }
+
+    showLoading();
+
+    fetch('{% url "trip_planner:get_weather" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({
+            city: destination
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            displayWeather(data.weather);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        alert('Error: ' + error);
+    });
+}
+
+function planTrip() {
+    const formData = {
+        destination: document.getElementById('destination').value,
+        days: document.getElementById('days').value,
+        budget_level: document.getElementById('budget_level').value
+    };
+
+    if (!formData.destination) {
+        alert('Please enter a destination');
+        return;
+    }
+
+    showLoading();
+
+    fetch('{% url "trip_planner:plan_trip" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            displayBasicPlan(data);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    });
+}
+
+function comprehensivePlan() {
+    const formData = {
+        destination: document.getElementById('destination').value,
+        days: document.getElementById('days').value,
+        budget_level: document.getElementById('budget_level').value
+    };
+
+    if (!formData.destination) {
+        alert('Please enter a destination');
+        return;
+    }
+
+    showLoading();
+
+    fetch('{% url "trip_planner:comprehensive_plan" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            displayComprehensivePlan(data.plan);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    });
+}
+
+function displayWeather(weather) {
+    let html = `
+        <div class="row mt-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="card weather-card">
+                    <div class="card-body text-center">
+                        <h4><i class="fas fa-map-marker-alt"></i> ${weather.location || 'Weather Information'}</h4>
+    `;
+
+    if (weather.status === 'success') {
+        html += `
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h2>${weather.current_weather.temperature}</h2>
+                                <p class="mb-0">${weather.current_weather.description}</p>
+                                <small>Feels like ${weather.current_weather.feels_like}</small>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="fas fa-tint"></i> Humidity: ${weather.current_weather.humidity}</p>
+                                <p><i class="fas fa-wind"></i> Wind: ${weather.current_weather.wind_speed}</p>
+                                <p><i class="fas fa-eye"></i> Visibility: ${weather.current_weather.visibility}</p>
+                            </div>
+                        </div>
+        `;
+    } else {
+        html += `<p class="text-warning">${weather.error_message || 'Weather data unavailable'}</p>`;
+    }
+
+    html += `
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('resultsContainer').innerHTML = html;
+}
+
+function displayBasicPlan(data) {
+    let html = `
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Your Trip Plan</h2>
+    `;
+
+    // Weather
+    if (data.weather && data.weather.status === 'success') {
+        html += `
+                <div class="card weather-card mb-4">
+                    <div class="card-body text-center">
+                        <h5><i class="fas fa-map-marker-alt"></i> ${data.weather.location}</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>${data.weather.current_weather.temperature}</h3>
+                                <p>${data.weather.current_weather.description}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="fas fa-tint"></i> ${data.weather.current_weather.humidity}</p>
+                                <p><i class="fas fa-wind"></i> ${data.weather.current_weather.wind_speed}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        `;
+    }
+
+    // Itinerary
+    if (data.itinerary && data.itinerary.status === 'success') {
+        html += `
+                <div class="card card-custom mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-route"></i> ${data.itinerary.duration} Itinerary</h5>
+                    </div>
+                    <div class="card-body">
+        `;
+
+        data.itinerary.itinerary.forEach((day, index) => {
+            const dayKey = `Day ${index + 1}`;
+            html += `
+                        <div class="itinerary-day">
+                            <h6 class="fw-bold">${dayKey}</h6>
+                            <ul class="list-unstyled ms-3">
+            `;
+            day[dayKey].forEach(activity => {
+                html += `<li><i class="fas fa-check text-success"></i> ${activity}</li>`;
+            });
+            html += `
+                            </ul>
+                        </div>
+            `;
+        });
+
+        html += `
+                    </div>
+                </div>
+        `;
+    }
+
+    // Budget
+    if (data.budget && data.budget.status === 'success') {
+        html += `
+                <div class="card card-custom mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5><i class="fas fa-dollar-sign"></i> Budget Breakdown (${data.budget.budget_level})</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Flights:</strong> ${data.budget.breakdown.flights}</p>
+                                <p><strong>Accommodation:</strong> ${data.budget.breakdown.accommodation}</p>
+                                <p><strong>Food & Entertainment:</strong> ${data.budget.breakdown.food_and_entertainment}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Transportation:</strong> ${data.budget.breakdown.local_transportation}</p>
+                                <p><strong>Activities:</strong> ${data.budget.breakdown.activities_and_tours}</p>
+                                <h5 class="text-success"><strong>Total: ${data.budget.breakdown.total_estimated_cost}</strong></h5>
+                            </div>
+                        </div>
+                        <small class="text-muted">Daily average: ${data.budget.daily_average}</small>
+                    </div>
+                </div>
+        `;
+    }
+
+    html += `
+            </div>
+        </div>
+    `;
+
+    document.getElementById('resultsContainer').innerHTML = html;
+}
+
+function displayComprehensivePlan(plan) {
+    // For now, just display basic plan - you can expand this later
+    displayBasicPlan(plan);
+}
+</script>
+{% endblock %}
