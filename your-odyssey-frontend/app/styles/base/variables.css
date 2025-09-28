@@ -1,0 +1,53 @@
+:root {
+  /* Color Palette */
+  --primary-color: #1d3557;      /* Red for main actions and highlights */
+  --secondary-color: #457b9d;    /* Soft white for backgrounds */
+  --accent-color: #fb8500;       /* Light teal for accents */
+  --success-color: #6b7377;      /* Blue-gray for success states */
+  --warning-color: #ffb703;      /* Yellow for warnings */
+  --danger-color: #e63946;       /* Red for errors */
+  --error-bg-color: #fde8e8;     /* Soft red for error backgrounds */
+  --light-color: #f1faee;        /* Soft white for light backgrounds */
+  --dark-color: #14253d;         /* Deep navy for text */
+
+  /* Typography */
+  --heading-font: 'Poppins', sans-serif;
+  --body-font: 'Inter', sans-serif;
+  
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  --spacing-3xl: 4rem;     /* 64px */
+
+  /* Border Radius */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+
+  /* Box Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+
+  /* Z-index Scale */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+
+  /* Container Widths */
+  --container-max-width: 1200px;
+  --container-padding: var(--spacing-md);
+}

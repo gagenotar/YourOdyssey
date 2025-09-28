@@ -1,0 +1,7 @@
+/* Base Styles */
+@import './base/variables.css';
+@import './base/reset.css';
+@import './base/bootstrap-overrides.css';
+@import './base/utilities.css';
+
+/* CSS Module styles will be imported automatically by their components */

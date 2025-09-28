@@ -1,11 +1,11 @@
 # YourOdyssey
 
-Full-stack web application with React frontend and Django backend.
+Full-stack web application with React frontend and a Flask backend.
 
 ## Project Structure
 
 - `/your-odyssey-frontend/`: React frontend using Vite
-- `/your-odyssey-backend/`: Django backend
+- `/your-odyssey-backend/`: Flask backend (travel AI)
 
 ## Quick Start
 
@@ -24,7 +24,6 @@ Full-stack web application with React frontend and Django backend.
    # Install backend dependencies
    cd your-odyssey-backend
    pip install -r requirements.txt
-   python manage.py migrate
    ```
 
 3. Set up the frontend:
@@ -39,7 +38,7 @@ Full-stack web application with React frontend and Django backend.
    ```bash
    cd your-odyssey-backend
    source ../.venv/bin/activate  # On Windows: ..\.venv\Scripts\activate
-   python manage.py runserver
+   python flask_app.py
    ```
 
    In another terminal (frontend):
@@ -50,7 +49,7 @@ Full-stack web application with React frontend and Django backend.
 
 The application will be available at:
 - Frontend: http://localhost:5173
-- Backend API: http://localhost:8000/api/
+-- Backend API: http://localhost:5000/
 
 ## Development
 

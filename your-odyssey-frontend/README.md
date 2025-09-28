@@ -1,93 +1,52 @@
-# YourOdyssey Frontend
+# Welcome to React Router!
 
-The frontend application for YourOdyssey, built with React, TypeScript, and Vite.
+A modern, production-ready template for building full-stack React applications using React Router.
 
-## Tech Stack
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-- ⚛️ React 18
-- 🏗️ TypeScript
-- ⚡️ Vite for fast development and building
-- �️ React Router for navigation
-- � TailwindCSS for styling
-- � Fetch API for backend communication
+## Features
+
+- 🚀 Server-side rendering
+- ⚡️ Hot Module Replacement (HMR)
+- 📦 Asset bundling and optimization
+- 🔄 Data loading and mutations
+- 🔒 TypeScript by default
+- 🎉 TailwindCSS for styling
+- 📖 [React Router docs](https://reactrouter.com/)
 
 ## Getting Started
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 16.x or higher
-- npm 7.x or higher
-- Backend server running (see ../your-odyssey-backend/README.md)
 
 ### Installation
 
-1. Clone the repository (if you haven't already):
-   ```bash
-   git clone https://github.com/gagenotar/YourOdyssey.git
-   cd YourOdyssey/your-odyssey-frontend
-   ```
+Install the dependencies:
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 ### Development
 
-1. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   The application will be available at `http://localhost:5173`
+Start the development server with HMR:
 
-2. Make sure the backend server is running at `http://localhost:8000`
+```bash
+npm run dev
+```
 
-### Building for Production
+Your application will be available at `http://localhost:5173`.
 
-1. Create a production build:
-   ```bash
-   npm run build
-   ```
-   This will generate optimized files in the `dist` directory.
+## Building for Production
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+## Deployment
 
 ### Docker Deployment
 
-1. Build the Docker image:
-   ```bash
-   docker build -t your-odyssey-frontend .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 5173:5173 your-odyssey-frontend
-   ```
-
-## Project Structure
-
-```
-your-odyssey-frontend/
-├── app/                    # Application source code
-│   ├── utils/             # Utility functions and API calls
-│   ├── welcome/           # Welcome page component
-│   ├── routes/            # Route components
-│   ├── app.css           # Global styles
-│   ├── root.tsx          # Root component
-│   └── routes.ts         # Route definitions
-├── public/                # Static files
-├── package.json          # Project dependencies and scripts
-├── tsconfig.json         # TypeScript configuration
-├── vite.config.ts        # Vite configuration
-└── Dockerfile            # Docker configuration
-```
-
-## Development Guidelines
-
-1. **TypeScript**: Use TypeScript for all new files
-2. **Styling**: Use TailwindCSS classes for styling
-3. **API Calls**: Place all API-related functions in `app/utils/api.ts`
-4. **Components**: Create new components in feature-specific directories under `app/`
+To build and run using Docker:
 
 ```bash
 docker build -t my-app .

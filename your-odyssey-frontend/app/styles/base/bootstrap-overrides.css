@@ -1,0 +1,107 @@
+/* Bootstrap Component Overrides */
+
+/* Buttons */
+.btn {
+  transition: var(--transition-normal);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--dark-color);
+  color: var(--light-color);
+  border-color: var(--dark-color);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: var(--dark-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  border-color: var(--primary-color);
+}
+
+/* Forms */
+.form-control {
+  border-radius: var(--border-radius-sm);
+}
+
+.form-control:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.25rem rgba(168, 218, 220, 0.25);
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Cards */
+.card {
+  border-radius: var(--border-radius-md);
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--dark-color);
+}
+
+.navbar-brand,
+.nav-link {
+  color: var(--light-color);
+}
+
+.nav-link:hover {
+  color: var(--secondary-color);
+}
+
+/* Alerts */
+.alert {
+  border-radius: var(--border-radius-md);
+  border: none;
+}
+
+.alert-primary {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+}
+
+.alert-secondary {
+  background-color: var(--secondary-color);
+  color: var(--dark-color);
+}
+
+/* Modal */
+.modal-content {
+  border-radius: var(--border-radius-lg);
+  border: none;
+}
+
+/* List Groups */
+.list-group-item {
+  border-color: rgba(0, 0, 0, 0.125);
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+  }
+  
+  .list-group-item {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    border-color: var(--secondary-color);
+  }
+}

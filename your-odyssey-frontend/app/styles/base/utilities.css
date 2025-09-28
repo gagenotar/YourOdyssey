@@ -1,0 +1,60 @@
+/* Custom Utility Classes */
+
+/* Text Colors */
+.text-primary-custom { color: var(--primary-color) !important; }
+.text-secondary-custom { color: var(--secondary-color) !important; }
+.text-accent { color: var(--accent-color) !important; }
+
+/* Background Colors */
+.bg-primary-custom { background-color: var(--primary-color) !important; }
+.bg-secondary-custom { background-color: var(--secondary-color) !important; }
+.bg-accent { background-color: var(--accent-color) !important; }
+
+/* Gradients */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+}
+
+/* Shadows */
+.shadow-hover {
+  transition: var(--transition-normal);
+}
+
+.shadow-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Loading Animations */
+.loading-spinner {
+  border: 3px solid var(--light-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Layout Utilities */
+.container-custom {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Responsive Spacing */
+@media (max-width: 768px) {
+  .container-custom {
+    padding: 0 var(--spacing-sm);
+  }
+}

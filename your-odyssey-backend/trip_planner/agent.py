@@ -1,16 +1,19 @@
 import os
 import json
-from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Optional
 import google.generativeai as genai
 from dotenv import load_dotenv
+# Note: Flask imports and app instance were moved to `flask_app.py` so this
+# module can be used as a library by the Flask server and other code without
+# side effects on import.
 
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
+# Note: Flask app and CORS are provided by `flask_app.py` so this module
+# exposes only the agent implementation and the `travel_agent` instance.
 
 # Configuration - Only need Gemini API key to start
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -389,89 +392,6 @@ class SimplifiedTravelAgent:
 
 # Initialize the agent
 travel_agent = SimplifiedTravelAgent()
-
-
-# Flask Routes
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/generate_itinerary', methods=['POST'])
-def generate_itinerary():
-    try:
-        data = request.json
-        destination = data.get('destination', '').strip()
-        departure_location = data.get('departure_location', '').strip()
-        duration = int(data.get('duration', 3))
-        preferences = data.get('preferences', '').strip()
-        budget = data.get('budget', 'moderate').strip()
-
-        if not destination:
-            return jsonify({'error': 'Destination is required'}), 400
-
-        if duration < 1 or duration > 14:
-            return jsonify({'error': 'Duration must be between 1 and 14 days'}), 400
-
-        # Generate itinerary using Gemini
-        full_itinerary = travel_agent.generate_itinerary(destination, duration, preferences, budget, departure_location)
-
-        # Convert to dict for JSON response
-        itinerary_dict = {
-            'destination': full_itinerary.destination,
-            'duration': full_itinerary.duration,
-            'outbound_transport': asdict(full_itinerary.outbound_transport),
-            'return_transport': asdict(full_itinerary.return_transport),
-            'days': [asdict(day) for day in full_itinerary.days],
-            'destination_info': full_itinerary.destination_info,
-            'practical_info': full_itinerary.practical_info
-        }
-
-        return jsonify({
-            'success': True,
-            'itinerary': itinerary_dict
-        })
-
-    except Exception as e:
-        return jsonify({'error': f'Failed to generate itinerary: {str(e)}'}), 500
-
-
-@app.route('/ask_question', methods=['POST'])
-def ask_question():
-    try:
-        data = request.json
-        question = data.get('question', '').strip()
-
-        if not question:
-            return jsonify({'error': 'Question is required'}), 400
-
-        answer = travel_agent.ask_question(question)
-
-        return jsonify({
-            'success': True,
-            'answer': answer
-        })
-
-    except Exception as e:
-        return jsonify({'error': f'Failed to get answer: {str(e)}'}), 500
-
-
-@app.route('/health')
-def health_check():
-    return jsonify({'status': 'healthy', 'model': 'gemini-2.0-flash-exp'})
-
-
-if __name__ == '__main__':
-    print("🚀 Starting Simplified Travel Agent...")
-    print("📍 Available at: http://localhost:5000")
-    print("🤖 Using Gemini 2.0 Flash")
-    print("🔧 API Endpoints:")
-    print("   - POST /generate_itinerary")
-    print("   - POST /ask_question")
-    print("   - GET /health")
-
-    if not GEMINI_API_KEY:
-        print("⚠️  Warning: GEMINI_API_KEY not found in environment variables")
-        print("   Please set your Gemini API key in the .env file")
-
-    app.run(debug=True, host='0.0.0.0', port=5000)
+# Flask routes were intentionally removed from this module. See
+# `flask_app.py` at the repository root for the webserver entrypoint and
+# route implementations that import `travel_agent` from this file.

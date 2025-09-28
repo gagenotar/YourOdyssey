@@ -1,0 +1,28 @@
+.toastContainer {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  background: #e6ffed; /* pale green */
+  border: 1px solid #27a844; /* green */
+  color: #0b3d18;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1050;
+}
+
+.toastBody {
+  font-weight: 500;
+}
+
+.toastClose {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: #0b3d18;
+}
