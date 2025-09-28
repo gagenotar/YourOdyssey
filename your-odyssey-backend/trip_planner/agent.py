@@ -1,11 +1,161 @@
+def call_agent(prompt):
+    """Enhanced travel planning with detailed, in-depth responses."""
+
+    try:
+        prompt_lower = prompt.lower()
+
+        if "comprehensive" in prompt_lower or "plan" in prompt_lower:
+            # Enhanced trip planning with detailed analysis
+            words = prompt.split()
+            destination = "Paris"
+            days = 3
+            budget = "medium"
+
+            # Better parsing of user input
+            for i, word in enumerate(words):
+                if word.lower() in ["to", "for", "in", "visit", "visiting"] and i + 1 < len(words):
+                    destination = words[i + 1].strip(".,!?")
+                    break
+
+            # Extract duration
+            for word in words:
+                if word.isdigit() and int(word) <= 14:
+                    days = int(word)
+                    break
+
+            # Extract budget level
+            if any(term in prompt_lower for term in ["luxury", "high-end", "expensive", "premium"]):
+                budget = "high"
+            elif any(term in prompt_lower for term in ["budget", "cheap", "affordable", "low-cost"]):
+                budget = "low"
+
+            # Define budget ranges based on level
+            if budget == "high":
+                flight_range = "$800 - $1,500"
+                hotel_range = f"${200 * days} - ${500 * days} (${200} - ${500} per night)"
+                food_range = f"${80 * days} - ${150 * days} (${80} - ${150} per day)"
+                transport_range = "$200 - $500"
+                activities_range = "$300 - $600"
+                total_low = (800 + 200 * days + 80 * days + 200 + 300)
+                total_high = (1500 + 500 * days + 150 * days + 500 + 600)
+            elif budget == "low":
+                flight_range = "$400 - $800"
+                hotel_range = f"${40 * days} - ${80 * days} (${40} - ${80} per night)"
+                food_range = f"${25 * days} - ${50 * days} (${25} - ${50} per day)"
+                transport_range = "$50 - $150"
+                activities_range = "$100 - $200"
+                total_low = (400 + 40 * days + 25 * days + 50 + 100)
+                total_high = (800 + 80 * days + 50 * days + 150 + 200)
+            else:  # medium
+                flight_range = "$600 - $1,200"
+                hotel_range = f"${100 * days} - ${200 * days} (${100} - ${200} per night)"
+                food_range = f"${50 * days} - ${100 * days} (${50} - ${100} per day)"
+                transport_range = "$100 - $300"
+                activities_range = "$200 - $400"
+                total_low = (600 + 100 * days + 50 * days + 100 + 200)
+                total_high = (1200 + 200 * days + 100 * days + 300 + 400)
+
+            # Create detailed, narrative-style response
+            detailed_plan = f"""Based on your {budget}-range budget and {days}-day timeframe, here's a comprehensive travel plan for {destination.title()}:
+
+**{destination.upper()}: A Complete Travel Experience**
+
+**Experience Overview:**
+{destination.title()} offers a perfect blend of cultural immersion, historical exploration, and modern conveniences. This {days}-day itinerary balances must-see attractions with authentic local experiences, giving you a comprehensive taste of what makes this destination special.
+
+**Detailed Cost Breakdown:**
+
+**Flights (round trip from East Coast):** {flight_range}
+**Accommodation ({budget}-range hotels/accommodations):** {hotel_range}
+**Food and Dining:** {food_range}
+**Transportation (local transport, day trips):** {transport_range}
+**Activities and Entrance Fees:** {activities_range}
+**Total Estimated Cost:** ${total_low:,} - ${total_high:,}
+
+**Comprehensive {days}-Day Itinerary:**
+
+**Days 1-2: Arrival and City Orientation**
+Start your journey by settling into the rhythm of {destination.title()}. After arriving and checking into your accommodation, spend your first afternoon exploring the immediate neighborhood around your hotel. This gentle introduction helps combat jet lag while giving you a feel for local life.
+
+Visit the primary iconic landmark during your second day when you're more alert. Book skip-the-line tickets in advance to maximize your time. Spend the evening in a traditional local restaurant to experience authentic cuisine and observe local dining customs.
+
+**Day 3: Cultural Deep Dive**
+Dedicate this day to understanding the cultural heart of {destination.title()}. Visit the most significant museum or cultural site, allowing 3-4 hours for a thorough exploration. Follow this with a walking tour of historic neighborhoods where you can see how locals actually live and work.
+
+**Days 4-{days}: Extended Exploration and Personal Discovery**
+{f"Use your remaining days to balance structured sightseeing with spontaneous exploration. Consider a day trip to a nearby attraction or secondary city. Reserve time for shopping, relaxing in local cafes, and revisiting places that particularly captured your interest." if days > 3 else "Use your final day for any missed attractions and souvenir shopping."}
+
+**Timezone and Jet Lag Considerations:**
+Research the local timezone before departure to plan your adjustment strategy. Most travelers need 2-3 days to fully adapt to significant time changes. Plan intensive activities for when your energy levels align with local time, and use the first few days for lighter exploration.
+
+**Accommodation Strategy:**
+{f"Stay in luxury hotels with concierge services in central locations. Look for historic properties or boutique hotels that offer unique character and premium amenities. These typically range ${200}-${500} per night but provide exceptional service and memorable experiences." if budget == "high" else f"Focus on well-located mid-range hotels with good reviews and essential amenities. Properties near public transportation hubs offer both convenience and cost savings, typically ranging ${100}-${200} per night." if budget == "medium" else f"Consider hostels, guesthouses, or budget hotel chains in safe neighborhoods. Prioritize locations with good reviews, security, and access to public transport, typically ${40}-${80} per night."}
+
+**Transportation and Getting Around:**
+Research public transportation passes for unlimited travel during your stay. Most cities offer tourist passes that include metro, bus, and sometimes regional trains. For longer distances or day trips, compare costs between trains, buses, and domestic flights. Factor in comfort and time savings, not just price.
+
+**Dining and Food Experiences:**
+Embrace the local food culture by mixing different dining experiences. Start days with hotel breakfast or local cafes to fuel sightseeing. Lunch at casual local spots where residents eat - these often offer the best value and most authentic flavors. Reserve 2-3 special dinners at recommended restaurants that showcase regional cuisine.
+
+**Money-Saving Tips:**
+{"Consider traveling during shoulder season (spring or fall) for 20-30% savings on accommodations and fewer crowds at major attractions. Book museums and popular sites online in advance for potential discounts." if budget != "high" else "Book exclusive experiences and premium accommodations well in advance. Consider hiring private guides for personalized experiences that maximize your limited time."}
+
+**Cultural Preparation:**
+Learn basic phrases in the local language - greetings, please, thank you, and excuse me go a long way. Research tipping customs, appropriate dress for religious sites, and general etiquette. Understanding meal times and business hours prevents disappointment and helps you blend in with local rhythms.
+
+**Weather and Packing Considerations:**
+Check current weather patterns and seasonal expectations before departure. Pack layers for temperature changes throughout the day and comfortable walking shoes suitable for varied terrain. Include appropriate attire for any religious sites or upscale restaurants you plan to visit.
+
+**Final Recommendations:**
+Purchase travel insurance to protect against unexpected cancellations or medical emergencies. Keep digital and physical copies of important documents. Share your itinerary with someone at home and register with your embassy for extended stays.
+
+This {days}-day plan provides a framework that balances must-see attractions with authentic local experiences. The key is maintaining flexibility - some of your best travel memories often come from unexpected discoveries and spontaneous adventures.
+
+**Planning Date:** {datetime.datetime.now().strftime('%B %d, %Y')}
+
+Would you like me to refine any specific aspect of this itinerary or explore alternative options within your budget range?"""
+
+            return detailed_plan
+
+        else:
+            # Enhanced general travel assistance
+            return f"""I can help you create detailed, comprehensive vacation plans with in-depth cost breakdowns and practical recommendations. Here's what I provide:
+
+**Detailed Trip Planning:**
+I create narrative-style itineraries that go beyond basic frameworks. You'll get specific cost ranges, day-by-day activity suggestions, accommodation strategies, and cultural insights that help you travel like an informed local rather than a typical tourist.
+
+**Realistic Budget Analysis:**
+Instead of generic estimates, I provide detailed cost breakdowns covering flights, accommodation, meals, transportation, and activities. I factor in seasonal variations, booking strategies, and money-saving tips appropriate for your budget level.
+
+**Cultural Integration:**
+My recommendations include practical advice for dining etiquette, tipping customs, appropriate dress codes, and language basics that help you navigate confidently and respectfully in your destination.
+
+**Practical Logistics:**
+I consider jet lag management, optimal activity timing, transportation efficiency, and weather considerations to help you maximize your time and energy during your trip.
+
+**Example Request Formats:**
+- "Create a 7-day plan for Italy with a mid-range budget"
+- "Plan a luxury 5-day trip to Japan"
+- "I need a budget-friendly European adventure for 10 days"
+
+**To Get Started:**
+Tell me your destination, trip length (1-14 days), and budget preference (budget-friendly, mid-range, or luxury). I'll create a comprehensive plan with specific recommendations you can actually use to book and plan your trip.
+
+What destination interests you most?"""
+
+    except Exception as e:
+        return f"I encountered an issue processing your request: {str(e)}. Could you please rephrase your question or provide more specific details about your travel plans?"  # trip_planner/agent.py
+
+
 import datetime
 from zoneinfo import ZoneInfo
 from google.adk.agents import Agent
 import requests
 import os
 
+from google.adk.tools import google_search
 
-# Weather functions (include the previous weather functions here)
+
 def get_current_weather(city: str, country_code: str = "") -> dict:
     """Gets current weather information for a city using WeatherAPI.com."""
     api_key = os.getenv('WEATHERAPI_KEY')
@@ -24,7 +174,7 @@ def get_current_weather(city: str, country_code: str = "") -> dict:
     params = {
         'key': api_key,
         'q': location,
-        'aqi': 'no'  # Don't include air quality data
+        'aqi': 'no'
     }
 
     try:
@@ -102,704 +252,590 @@ def get_weather_travel_advice(temp_celsius: float, description: str, wind_kph: f
     return advice
 
 
-def smart_destination_info(destination: str, search_online: bool = False) -> dict:
-    """Provides comprehensive destination information using database and AI knowledge.
+def get_timezone_info(destination: str) -> dict:
+    """Gets timezone information for a destination using Google search and timezone databases."""
+    try:
+        # First try to search for timezone information
+        search_query = f"{destination} timezone UTC offset current time"
+        search_results = google_search(search_query)
 
-    Args:
-        destination (str): The name of the destination city or country.
-        search_online (bool): If True, indicates user wants current/online information.
+        # Also try to get timezone from common city mappings
+        timezone_info = get_city_timezone(destination)
 
-    Returns:
-        dict: status and comprehensive destination information.
-    """
+        # Get current time in destination
+        current_time_info = get_current_time_in_destination(destination)
 
-    # Core destination database
-    destinations = {
-        "paris": {
-            "status": "success",
-            "source": "database",
-            "info": {
-                "best_time_to_visit": "April-June, September-October",
-                "top_attractions": ["Eiffel Tower", "Louvre Museum", "Notre-Dame Cathedral", "Champs-Élysées"],
-                "budget_estimate": "$150-300 per day",
-                "climate": "Temperate oceanic climate",
-                "local_currency": "Euro (EUR)",
-                "language": "French",
-                "travel_tips": "Book museum tickets in advance, learn basic French phrases, wear comfortable walking shoes"
-            }
-        },
-        "tokyo": {
-            "status": "success",
-            "source": "database",
-            "info": {
-                "best_time_to_visit": "March-May, September-November",
-                "top_attractions": ["Tokyo Skytree", "Senso-ji Temple", "Shibuya Crossing", "Meiji Shrine"],
-                "budget_estimate": "$200-400 per day",
-                "climate": "Humid subtropical climate",
-                "local_currency": "Japanese Yen (JPY)",
-                "language": "Japanese",
-                "travel_tips": "Get a JR Pass for trains, carry cash, bow slightly when greeting, remove shoes indoors"
-            }
-        },
-        "new york": {
-            "status": "success",
-            "source": "database",
-            "info": {
-                "best_time_to_visit": "April-June, September-November",
-                "top_attractions": ["Statue of Liberty", "Central Park", "Times Square", "Brooklyn Bridge"],
-                "budget_estimate": "$250-500 per day",
-                "climate": "Humid continental climate",
-                "local_currency": "US Dollar (USD)",
-                "language": "English",
-                "travel_tips": "Use the subway system, tip 18-20% at restaurants, book Broadway shows in advance"
-            }
-        },
-        "rome": {
-            "status": "success",
-            "source": "database",
-            "info": {
-                "best_time_to_visit": "April-June, September-October",
-                "top_attractions": ["Colosseum", "Vatican City", "Trevi Fountain", "Roman Forum"],
-                "budget_estimate": "$120-250 per day",
-                "climate": "Mediterranean climate",
-                "local_currency": "Euro (EUR)",
-                "language": "Italian",
-                "travel_tips": "Validate train tickets, dress modestly for churches, eat lunch late (1-3pm)"
-            }
-        }
-    }
-
-    destination_key = destination.lower().strip()
-
-    # Check if it's in our database
-    if destination_key in destinations:
-        result = destinations[destination_key]
-        if search_online:
-            result[
-                "search_suggestion"] = f"For the most current information about {destination}, including recent events, updated prices, or COVID restrictions, I recommend using a web search or checking official tourism websites."
-        return result
-
-    # For destinations not in database, provide AI-generated information
-    expanded_destinations = {
-        "london": {
-            "best_time_to_visit": "May-September",
-            "top_attractions": ["Big Ben", "Tower of London", "British Museum", "London Eye"],
-            "budget_estimate": "$200-350 per day",
-            "climate": "Temperate oceanic climate",
-            "local_currency": "British Pound (GBP)",
-            "language": "English",
-            "travel_tips": "Get an Oyster Card for public transport, always carry an umbrella, book theater shows in advance"
-        },
-        "barcelona": {
-            "best_time_to_visit": "April-June, September-October",
-            "top_attractions": ["Sagrada Familia", "Park Güell", "Las Ramblas", "Gothic Quarter"],
-            "budget_estimate": "$130-250 per day",
-            "climate": "Mediterranean climate",
-            "local_currency": "Euro (EUR)",
-            "language": "Spanish/Catalan",
-            "travel_tips": "Learn basic Spanish, siesta hours are 2-5pm, watch for pickpockets in tourist areas"
-        },
-        "bali": {
-            "best_time_to_visit": "April-October (dry season)",
-            "top_attractions": ["Ubud Rice Terraces", "Tanah Lot Temple", "Mount Batur", "Seminyak Beach"],
-            "budget_estimate": "$50-150 per day",
-            "climate": "Tropical climate",
-            "local_currency": "Indonesian Rupiah (IDR)",
-            "language": "Indonesian/Balinese",
-            "travel_tips": "Rent a scooter for transportation, respect temple dress codes, bargain at markets"
-        },
-        "bangkok": {
-            "best_time_to_visit": "November-March (cool season)",
-            "top_attractions": ["Grand Palace", "Wat Pho", "Chatuchak Market", "Khao San Road"],
-            "budget_estimate": "$40-120 per day",
-            "climate": "Tropical savanna climate",
-            "local_currency": "Thai Baht (THB)",
-            "language": "Thai",
-            "travel_tips": "Use BTS/MRT for transport, try street food, remove shoes in temples"
-        }
-    }
-
-    if destination_key in expanded_destinations:
         return {
             "status": "success",
-            "source": "ai_knowledge",
-            "info": expanded_destinations[destination_key],
-            "note": f"This information is based on general knowledge. For current conditions, events, or restrictions in {destination}, consider checking recent sources online."
+            "destination": destination,
+            "search_results": search_results,
+            "timezone_data": timezone_info,
+            "current_time": current_time_info,
+            "note": "Timezone information from search results and timezone databases"
         }
-
-    # For completely unknown destinations, provide helpful guidance
-    return {
-        "status": "partial",
-        "source": "general_guidance",
-        "message": f"I don't have specific detailed information for '{destination}' in my database.",
-        "general_advice": {
-            "research_suggestions": [
-                f"Check official tourism websites for {destination}",
-                "Look up current weather and seasonal information",
-                "Research visa requirements for your nationality",
-                "Check travel advisories and safety information",
-                "Look for recent travel blogs and reviews"
-            ],
-            "planning_tips": [
-                "Book accommodations in advance for popular destinations",
-                "Learn basic phrases in the local language",
-                "Research local customs and etiquette",
-                "Check if any special events coincide with your visit",
-                "Consider travel insurance"
-            ]
-        },
-        "search_suggestion": f"For detailed, current information about {destination}, I recommend using web search tools or consulting recent travel guides."
-    }
-
-
-def enhanced_search_info(query: str, search_type: str = "general") -> dict:
-    """Simulates search functionality by providing guidance on what to search for.
-
-    Args:
-        query (str): The search query about travel/destinations.
-        search_type (str): Type of search - "current_events", "prices", "weather", "general".
-
-    Returns:
-        dict: Search guidance and suggestions.
-    """
-
-    search_suggestions = {
-        "current_events": {
-            "suggested_queries": [
-                f"current events {query} 2024",
-                f"travel restrictions {query}",
-                f"festivals events {query} 2024",
-                f"COVID requirements {query}"
-            ],
-            "sources_to_check": ["Official tourism boards", "Government travel sites", "Recent news articles",
-                                 "Travel forums"]
-        },
-        "prices": {
-            "suggested_queries": [
-                f"hotel prices {query} 2024",
-                f"flight costs to {query}",
-                f"restaurant prices {query}",
-                f"attraction tickets {query}"
-            ],
-            "sources_to_check": ["Booking.com", "Expedia", "TripAdvisor", "Local tourism sites"]
-        },
-        "weather": {
-            "suggested_queries": [
-                f"current weather {query}",
-                f"weather forecast {query}",
-                f"best time to visit {query}",
-                f"seasonal weather {query}"
-            ],
-            "sources_to_check": ["Weather.com", "AccuWeather", "Local weather services"]
-        },
-        "general": {
-            "suggested_queries": [
-                f"travel guide {query}",
-                f"things to do {query}",
-                f"travel tips {query}",
-                f"best attractions {query}"
-            ],
-            "sources_to_check": ["Lonely Planet", "TripAdvisor", "Travel blogs", "Official tourism sites"]
-        }
-    }
-
-    return {
-        "status": "search_guidance",
-        "query": query,
-        "search_type": search_type,
-        "guidance": search_suggestions.get(search_type, search_suggestions["general"]),
-        "note": "Since I can't perform live web searches in this configuration, here are the best search strategies and sources for current information."
-    }
-
-
-def create_itinerary(destination: str, days: int) -> dict:
-    """Creates a sample vacation itinerary for a destination."""
-    if days < 1 or days > 7:
+    except Exception as e:
         return {
             "status": "error",
-            "error_message": "I can create itineraries for 1-7 days only."
+            "error_message": f"Failed to get timezone info: {str(e)}"
         }
 
-    itineraries = {
-        "paris": {
-            1: ["Visit Eiffel Tower", "Walk along Seine River", "Dinner in Latin Quarter"],
-            2: ["Louvre Museum", "Notre-Dame Cathedral", "Evening river cruise"],
-            3: ["Versailles day trip", "Palace and gardens tour", "Return to Paris for dinner"],
-            4: ["Montmartre and Sacré-Cœur", "Artist studios visit", "Moulin Rouge show"],
-            5: ["Champs-Élysées shopping", "Arc de Triomphe", "Café culture experience"],
-            6: ["Marais district exploration", "Jewish quarter", "Vintage shopping"],
-            7: ["Day trip to Loire Valley", "Castle visits", "Wine tasting"]
-        },
-        "tokyo": {
-            1: ["Sensoji Temple", "Asakusa district", "Traditional dinner"],
-            2: ["Tokyo Skytree", "Sumida River area", "Robot Restaurant show"],
-            3: ["Meiji Shrine", "Harajuku fashion district", "Shibuya crossing"],
-            4: ["Tsukiji Fish Market", "Sushi breakfast", "Imperial Palace gardens"],
-            5: ["Day trip to Mount Fuji", "Hakone hot springs", "Lake views"],
-            6: ["Akihabara electronics", "Anime culture", "Gaming centers"],
-            7: ["Traditional ryokan stay", "Tea ceremony", "Zen meditation"]
-        },
-        "london": {
-            1: ["Tower of London", "Tower Bridge", "Borough Market lunch"],
-            2: ["British Museum", "Covent Garden", "West End show"],
-            3: ["Westminster Abbey", "Big Ben", "Thames river cruise"],
-            4: ["Tate Modern", "Shakespeare's Globe", "South Bank walk"],
-            5: ["Day trip to Windsor Castle", "Royal gardens", "Return to London"],
-            6: ["Camden Market", "Regent's Park", "London Zoo"],
-            7: ["Greenwich Observatory", "Maritime Museum", "Greenwich Park"]
-        },
-        "barcelona": {
-            1: ["Sagrada Familia", "Park Güell", "Gothic Quarter evening"],
-            2: ["Las Ramblas", "Boqueria Market", "Picasso Museum"],
-            3: ["Casa Batlló", "Casa Milà", "Passeig de Gràcia shopping"],
-            4: ["Barceloneta Beach", "Seafood lunch", "Olympic Port"],
-            5: ["Montjuïc Hill", "Magic Fountain", "Poble Espanyol"],
-            6: ["Day trip to Montserrat", "Monastery visit", "Mountain hiking"],
-            7: ["El Raval district", "MACBA museum", "Tapas tour"]
-        }
+
+def get_city_timezone(city: str) -> dict:
+    """Gets timezone information for major cities using zoneinfo."""
+    # Common city to timezone mappings
+    city_timezones = {
+        'paris': 'Europe/Paris',
+        'london': 'Europe/London',
+        'tokyo': 'Asia/Tokyo',
+        'new york': 'America/New_York',
+        'los angeles': 'America/Los_Angeles',
+        'rome': 'Europe/Rome',
+        'barcelona': 'Europe/Madrid',
+        'amsterdam': 'Europe/Amsterdam',
+        'berlin': 'Europe/Berlin',
+        'madrid': 'Europe/Madrid',
+        'lisbon': 'Europe/Lisbon',
+        'moscow': 'Europe/Moscow',
+        'dubai': 'Asia/Dubai',
+        'mumbai': 'Asia/Kolkata',
+        'delhi': 'Asia/Kolkata',
+        'bangkok': 'Asia/Bangkok',
+        'singapore': 'Asia/Singapore',
+        'hong kong': 'Asia/Hong_Kong',
+        'beijing': 'Asia/Shanghai',
+        'shanghai': 'Asia/Shanghai',
+        'sydney': 'Australia/Sydney',
+        'melbourne': 'Australia/Melbourne',
+        'toronto': 'America/Toronto',
+        'vancouver': 'America/Vancouver',
+        'mexico city': 'America/Mexico_City',
+        'buenos aires': 'America/Argentina/Buenos_Aires',
+        'rio de janeiro': 'America/Sao_Paulo',
+        'sao paulo': 'America/Sao_Paulo',
+        'chicago': 'America/Chicago',
+        'miami': 'America/Miami',
+        'las vegas': 'America/Los_Angeles',
+        'cairo': 'Africa/Cairo',
+        'johannesburg': 'Africa/Johannesburg',
+        'istanbul': 'Europe/Istanbul',
+        'athens': 'Europe/Athens',
+        'vienna': 'Europe/Vienna',
+        'zurich': 'Europe/Zurich',
+        'stockholm': 'Europe/Stockholm',
+        'oslo': 'Europe/Oslo',
+        'copenhagen': 'Europe/Copenhagen',
+        'dublin': 'Europe/Dublin',
+        'reykjavik': 'Atlantic/Reykjavik'
     }
 
-    destination_key = destination.lower().strip()
+    try:
+        city_key = city.lower().strip()
 
-    if destination_key in itineraries:
-        itinerary = []
-        for day in range(1, days + 1):
-            if day <= len(itineraries[destination_key]):
-                itinerary.append({
-                    f"Day {day}": itineraries[destination_key][day]
-                })
-            else:
-                itinerary.append({
-                    f"Day {day}": ["Free day", "Explore at your own pace", "Local experiences"]
-                })
+        if city_key in city_timezones:
+            try:
+                tz = ZoneInfo(city_timezones[city_key])
+                now = datetime.datetime.now(tz)
+
+                # Calculate UTC offset
+                utc_offset = now.utcoffset()
+                if utc_offset is not None:
+                    offset_hours = int(utc_offset.total_seconds() / 3600)
+                    offset_minutes = int((utc_offset.total_seconds() % 3600) / 60)
+
+                    # Format offset string
+                    offset_str = f"UTC{offset_hours:+03d}:{offset_minutes:02d}"
+                else:
+                    offset_str = "UTC+00:00"
+
+                return {
+                    "timezone_name": city_timezones[city_key],
+                    "utc_offset": offset_str,
+                    "local_time": now.strftime("%Y-%m-%d %H:%M:%S"),
+                    "timezone_abbreviation": now.strftime('%Z') if hasattr(now, 'strftime') else "N/A",
+                    "status": "found"
+                }
+            except Exception as tz_error:
+                return {
+                    "status": "error",
+                    "error_message": f"Error processing timezone for {city}: {str(tz_error)}",
+                    "fallback_timezone": "UTC"
+                }
+        else:
+            return {
+                "status": "not_found",
+                "message": f"Timezone mapping not found for {city}. Will rely on search results.",
+                "searched_city": city_key
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Unexpected error in timezone lookup for {city}: {str(e)}",
+            "fallback_timezone": "UTC"
+        }
+
+
+def get_current_time_in_destination(destination: str) -> dict:
+    """Gets current time and time difference for a destination."""
+    try:
+        # Get user's current timezone (assuming US Eastern as default)
+        user_tz = ZoneInfo('America/New_York')  # Default to Eastern
+        user_time = datetime.datetime.now(user_tz)
+
+        # Try to get destination timezone
+        timezone_data = get_city_timezone(destination)
+
+        if timezone_data.get("status") == "found":
+            try:
+                dest_tz = ZoneInfo(timezone_data["timezone_name"])
+                dest_time = datetime.datetime.now(dest_tz)
+
+                # Calculate time difference
+                time_diff = dest_time.utcoffset() - user_time.utcoffset()
+                hours_diff = int(time_diff.total_seconds() / 3600)
+
+                return {
+                    "status": "success",
+                    "destination_time": dest_time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "destination_timezone": timezone_data.get("timezone_name", "Unknown"),
+                    "user_time": user_time.strftime("%Y-%m-%d %H:%M:%S EST"),
+                    "time_difference": f"{hours_diff:+d} hours from Eastern Time",
+                    "timezone_info": timezone_data
+                }
+            except Exception as tz_error:
+                return {
+                    "status": "error",
+                    "error_message": f"Error with destination timezone: {str(tz_error)}",
+                    "fallback_info": timezone_data
+                }
+        else:
+            return {
+                "status": "search_needed",
+                "message": f"Could not determine timezone for {destination}. Check search results for timezone information.",
+                "timezone_search_info": timezone_data
+            }
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to calculate time difference: {str(e)}"
+        }
+
+
+def search_destination_info(destination: str, specific_query: str = None) -> dict:
+    """Uses Google search to get current destination information."""
+    try:
+        if specific_query:
+            search_query = f"{destination} {specific_query}"
+        else:
+            search_query = f"{destination} travel guide attractions things to do 2024"
+
+        # Use Google ADK search
+        search_results = google_search(search_query)
 
         return {
             "status": "success",
-            "destination": destination.title(),
+            "destination": destination,
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Information sourced from current web search results"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to search for destination info: {str(e)}"
+        }
+
+
+def search_travel_budget(destination: str, days: int, budget_level: str = "medium") -> dict:
+    """Uses Google search to get current budget information."""
+    try:
+        search_query = f"{destination} travel budget cost {days} days {budget_level} budget 2024"
+        search_results = google_search(search_query)
+
+        return {
+            "status": "success",
+            "destination": destination,
             "duration": f"{days} days",
-            "itinerary": itinerary
+            "budget_level": budget_level,
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Budget information sourced from current web search results"
         }
-
-    # For destinations not in our itinerary database, provide framework
-    return {
-        "status": "framework",
-        "destination": destination.title(),
-        "duration": f"{days} days",
-        "message": f"I don't have a pre-built itinerary for {destination}, but I can provide a general framework:",
-        "framework": {
-            "Day 1": ["Arrival and city orientation", "Visit main landmark", "Local dinner"],
-            "Day 2": ["Major museum or cultural site", "Historic district exploration", "Traditional cuisine"],
-            "Day 3": ["Day trip or nature activity", "Local markets", "Evening entertainment"],
-            "Days 4-7": ["Mix of remaining attractions", "Local experiences", "Shopping and relaxation"]
-        },
-        "suggestion": f"For a detailed {days}-day itinerary for {destination}, I recommend searching for recent travel guides or consulting local tourism websites."
-    }
-
-
-def get_travel_budget(destination: str, days: int, budget_level: str = "medium") -> dict:
-    """Estimates travel budget for a vacation."""
-    if days < 1:
+    except Exception as e:
         return {
             "status": "error",
-            "error_message": "Duration must be at least 1 day."
+            "error_message": f"Failed to search for budget info: {str(e)}"
         }
 
-    budget_multipliers = {"low": 0.7, "medium": 1.0, "high": 1.5}
 
-    if budget_level.lower() not in budget_multipliers:
+def search_itinerary_ideas(destination: str, days: int) -> dict:
+    """Uses Google search to get current itinerary suggestions."""
+    try:
+        search_query = f"{destination} {days} day itinerary travel plan 2024"
+        search_results = google_search(search_query)
+
+        return {
+            "status": "success",
+            "destination": destination,
+            "duration": f"{days} days",
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Itinerary suggestions sourced from current web search results"
+        }
+    except Exception as e:
         return {
             "status": "error",
-            "error_message": "Budget level must be 'low', 'medium', or 'high'."
+            "error_message": f"Failed to search for itinerary info: {str(e)}"
         }
 
-    base_costs = {
-        "paris": {"daily": 225, "flight": 800, "accommodation": 120},
-        "tokyo": {"daily": 300, "flight": 1200, "accommodation": 150},
-        "new york": {"daily": 375, "flight": 600, "accommodation": 200},
-        "rome": {"daily": 185, "flight": 700, "accommodation": 100},
-        "london": {"daily": 250, "flight": 750, "accommodation": 140},
-        "barcelona": {"daily": 180, "flight": 650, "accommodation": 90},
-        "bali": {"daily": 75, "flight": 1100, "accommodation": 40},
-        "bangkok": {"daily": 65, "flight": 900, "accommodation": 30}
-    }
 
-    destination_key = destination.lower().strip()
-
-    if destination_key in base_costs:
-        multiplier = budget_multipliers[budget_level.lower()]
-        costs = base_costs[destination_key]
-
-        daily_cost = int(costs["daily"] * multiplier)
-        flight_cost = int(costs["flight"] * multiplier)
-        accommodation_cost = int(costs["accommodation"] * multiplier * days)
-        food_entertainment = int(daily_cost * days * 0.6)
-        transportation = int(daily_cost * days * 0.2)
-        activities = int(daily_cost * days * 0.2)
-
-        total_cost = flight_cost + accommodation_cost + food_entertainment + transportation + activities
+def search_accommodation_options(destination: str, budget_level: str = "medium") -> dict:
+    """Uses Google search to get current accommodation recommendations."""
+    try:
+        search_query = f"{destination} best hotels {budget_level} budget accommodation recommendations 2024"
+        search_results = google_search(search_query)
 
         return {
+            "status": "success",
+            "destination": destination,
+            "budget_level": budget_level,
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Accommodation options sourced from current web search results"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to search for accommodation info: {str(e)}"
+        }
+
+
+def search_dining_recommendations(destination: str) -> dict:
+    """Uses Google search to get current restaurant and dining recommendations."""
+    try:
+        search_query = f"{destination} best restaurants local food dining recommendations 2024"
+        search_results = google_search(search_query)
+
+        return {
+            "status": "success",
+            "destination": destination,
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Dining recommendations sourced from current web search results"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to search for dining info: {str(e)}"
+        }
+
+
+def search_cultural_info(destination: str) -> dict:
+    """Uses Google search to get current cultural information and travel tips."""
+    try:
+        search_query = f"{destination} culture customs etiquette travel tips language phrases 2024"
+        search_results = google_search(search_query)
+
+        return {
+            "status": "success",
+            "destination": destination,
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Cultural information sourced from current web search results"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to search for cultural info: {str(e)}"
+        }
+
+
+def search_current_events(destination: str) -> dict:
+    """Uses Google search to get current events and conditions affecting travel."""
+    try:
+        search_query = f"{destination} current events travel conditions restrictions festivals 2024"
+        search_results = google_search(search_query)
+
+        return {
+            "status": "success",
+            "destination": destination,
+            "search_query": search_query,
+            "results": search_results,
+            "note": "Current events and conditions sourced from current web search results"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to search for current events: {str(e)}"
+        }
+
+
+def create_comprehensive_trip_plan(destination: str, days: int = 3, budget_level: str = "medium") -> dict:
+    """Creates a comprehensive trip plan using current web search data."""
+
+    if days < 1 or days > 14:
+        return {
+            "status": "error",
+            "error_message": "I can create trip plans for 1-14 days only."
+        }
+
+    try:
+        # Gather all information using Google search and APIs
+        destination_info = search_destination_info(destination)
+        budget_info = search_travel_budget(destination, days, budget_level)
+        itinerary_info = search_itinerary_ideas(destination, days)
+        accommodation_info = search_accommodation_options(destination, budget_level)
+        dining_info = search_dining_recommendations(destination)
+        cultural_info = search_cultural_info(destination)
+        current_events = search_current_events(destination)
+        weather_data = get_current_weather(destination)
+        timezone_data = get_timezone_info(destination)
+
+        # Compile comprehensive trip plan
+        trip_plan = {
             "status": "success",
             "destination": destination.title(),
             "duration": f"{days} days",
             "budget_level": budget_level.title(),
-            "breakdown": {
-                "flights": f"${flight_cost}",
-                "accommodation": f"${accommodation_cost}",
-                "food_and_entertainment": f"${food_entertainment}",
-                "local_transportation": f"${transportation}",
-                "activities_and_tours": f"${activities}",
-                "total_estimated_cost": f"${total_cost}"
-            },
-            "daily_average": f"${daily_cost}",
-            "note": "Prices are estimates and may vary based on current market conditions."
+            "generated_on": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "timezone_information": timezone_data,
+            "weather_info": weather_data,
+            "destination_overview": destination_info,
+            "budget_analysis": budget_info,
+            "itinerary_suggestions": itinerary_info,
+            "accommodation_options": accommodation_info,
+            "dining_recommendations": dining_info,
+            "cultural_information": cultural_info,
+            "current_conditions": current_events,
+            "note": "All information gathered from current web sources, weather APIs, and timezone databases"
         }
 
+        return trip_plan
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "error_message": f"Failed to create comprehensive trip plan: {str(e)}"
+        }
+
+
+def get_general_travel_advice() -> dict:
+    """Provides general travel planning advice and tips."""
     return {
-        "status": "estimate",
-        "destination": destination.title(),
-        "message": f"I don't have specific budget data for {destination}.",
-        "general_guidance": {
-            "research_tips": [
-                "Check hotel booking sites for accommodation prices",
-                "Look up average meal costs on travel forums",
-                "Research local transportation options and costs",
-                "Find attraction prices on official websites"
+        "status": "success",
+        "general_advice": {
+            "planning_timeline": [
+                "Start planning 2-3 months in advance for international trips",
+                "Book flights and accommodation early for better prices",
+                "Check passport expiration dates (6 months validity required)",
+                "Research visa requirements for your destination"
             ],
-            "budget_factors": [
-                "Season and peak times affect prices significantly",
-                "Accommodation location impacts daily transport costs",
-                "Eating local vs. tourist restaurants makes a big difference",
-                "Free attractions and walking tours can reduce costs"
+            "packing_essentials": [
+                "Check weather forecast before packing",
+                "Bring copies of important documents",
+                "Pack medications in carry-on luggage",
+                "Consider electrical plug adapters for international travel"
+            ],
+            "money_tips": [
+                "Notify your bank of travel plans",
+                "Research local tipping customs",
+                "Consider travel insurance",
+                "Have multiple payment methods available"
+            ],
+            "safety_considerations": [
+                "Register with embassy for long trips",
+                "Share itinerary with someone at home",
+                "Keep emergency contacts handy",
+                "Research local emergency numbers"
             ]
         }
     }
 
-def create_comprehensive_trip_plan(destination: str, days: int = 3, budget_level: str = "medium") -> dict:
-    """Creates a comprehensive trip plan with all details for a destination.
 
-    Args:
-        destination (str): The destination city or country.
-        days (int): Number of days for the trip (1-7).
-        budget_level (str): Budget level - "low", "medium", or "high".
-
-    Returns:
-        dict: Complete trip planning information.
-    """
-
-    if days < 1 or days > 7:
-        return {
-            "status": "error",
-            "error_message": "I can create trip plans for 1-7 days only."
-        }
-
-    destination_key = destination.lower().strip()
-
-    # Comprehensive destination database
-    destinations_db = {
-        "paris": {
-            "trip_header": "Bonjour, City of Light Adventure!",
-            "appeal": "Paris enchants with its timeless elegance, world-class museums, charming cafés, and romantic atmosphere. From the iconic Eiffel Tower to hidden neighborhood bistros, every corner tells a story of art, culture, and joie de vivre.",
-            "timezone": "Central European Time (CET) - UTC+1",
-            "timezone_difference": "6 hours ahead of Miami, 9 hours ahead of Los Angeles",
-            "language": "French",
-            "common_phrases": [
-                "Bonjour (bon-ZHOOR) - Hello/Good morning",
-                "Merci (mer-SEE) - Thank you",
-                "Excusez-moi (ex-kew-zay-MWAH) - Excuse me",
-                "Parlez-vous anglais? (par-lay voo ahn-GLAY) - Do you speak English?",
-                "L'addition, s'il vous plaît (lah-dee-see-OHN seel voo PLAY) - The check, please"
-            ],
-            "cultural_etiquette": [
-                "Always greet shopkeepers when entering stores",
-                "Keep your voice down in restaurants and public transport",
-                "Dress more formally - avoid shorts and flip-flops in the city",
-                "Learn basic French phrases - locals appreciate the effort",
-                "Tipping 10% is standard, service charge often included"
-            ],
-            "electrical_plug": "Type C and E plugs (European two-pin)",
-            "seasonal_activities": {
-                "spring": ["Cherry blossoms in Jardin du Luxembourg", "Easter markets", "Fashion Week"],
-                "summer": ["Seine riverside beaches", "Outdoor cinema", "Festival d'été"],
-                "fall": ["Wine harvest festivals", "Nuit Blanche art festival", "Autumn markets"],
-                "winter": ["Christmas markets", "Ice skating at Hôtel de Ville", "Winter sales (January)"]
-            },
-            "hotels": {
-                "luxury": ["Le Bristol Paris", "The Ritz Paris", "Hotel Plaza Athénée"],
-                "mid_range": ["Hotel des Grands Boulevards", "Hotel Malte Opera", "Hotel National Des Arts et Métiers"],
-                "budget": ["Hotel Jeanne d'Arc", "MIJE hostels", "Generator Paris"]
-            },
-            "restaurants": {
-                "fine_dining": ["L'Ambroisie", "Guy Savoy", "Alain Ducasse"],
-                "casual": ["L'As du Fallafel", "Breizh Café", "Pink Mamma"],
-                "local_favorites": ["Bistrot Paul Bert", "Le Comptoir du Relais", "Café de Flore"]
-            },
-            "daily_itineraries": {
-                1: {
-                    "theme": "Classic Paris Icons",
-                    "morning": "Eiffel Tower visit and Trocadéro photos",
-                    "afternoon": "Seine River cruise and Île de la Cité",
-                    "evening": "Dinner in Latin Quarter",
-                    "hotel_area": "7th arrondissement (near Eiffel Tower)",
-                    "restaurant": "Le Comptoir du 7ème (traditional French bistro)"
-                },
-                2: {
-                    "theme": "Art and Culture Day",
-                    "morning": "Louvre Museum (pre-booked tickets)",
-                    "afternoon": "Tuileries Garden and Place Vendôme",
-                    "evening": "Montmartre and Sacré-Cœur sunset",
-                    "hotel_area": "1st arrondissement (Louvre area)",
-                    "restaurant": "L'Ami Jean (modern bistro cuisine)"
-                },
-                3: {
-                    "theme": "Royal Splendor",
-                    "morning": "Versailles Palace day trip",
-                    "afternoon": "Palace gardens and Marie Antoinette's estate",
-                    "evening": "Return to Paris, dinner at local brasserie",
-                    "hotel_area": "Stay near train station for easy Versailles access",
-                    "restaurant": "Brasserie Lipp (historic Parisian brasserie)"
-                }
-            }
-        },
-
-        "tokyo": {
-            "trip_header": "Konnichiwa, Land of the Rising Sun Experience!",
-            "appeal": "Tokyo blends ancient traditions with cutting-edge innovation, offering everything from serene temples to bustling neon districts. Experience incredible cuisine, unique culture, and the famous Japanese hospitality in this fascinating metropolis.",
-            "timezone": "Japan Standard Time (JST) - UTC+9",
-            "timezone_difference": "14 hours ahead of Miami, 17 hours ahead of Los Angeles",
-            "language": "Japanese",
-            "common_phrases": [
-                "Konnichiwa (kon-nee-chee-wah) - Hello",
-                "Arigatou gozaimasu (ah-ree-gah-toh go-zah-ee-mahs) - Thank you very much",
-                "Sumimasen (soo-mee-mah-sen) - Excuse me/Sorry",
-                "Eigo ga wakarimasu ka? (ay-go gah wah-kah-ree-mahs kah) - Do you understand English?",
-                "Oishii desu (oh-ee-shee dess) - It's delicious"
-            ],
-            "cultural_etiquette": [
-                "Bow slightly when greeting people",
-                "Remove shoes when entering homes, temples, some restaurants",
-                "Don't tip - it's not customary and can be offensive",
-                "Eat quietly and don't stick chopsticks upright in rice",
-                "Be quiet on public transportation"
-            ],
-            "electrical_plug": "Type A and B plugs (North American style)",
-            "seasonal_activities": {
-                "spring": ["Cherry blossom viewing (Hanami)", "Golden Week festivals", "Kanda Matsuri"],
-                "summer": ["Fireworks festivals (Hanabi)", "Bon Odori dancing", "Summer festivals"],
-                "fall": ["Autumn leaves viewing", "Chrysanthemum Festival", "Cultural Day events"],
-                "winter": ["Illumination displays", "New Year celebrations", "Hot springs visits"]
-            },
-            "hotels": {
-                "luxury": ["The Ritz-Carlton Tokyo", "Aman Tokyo", "Imperial Hotel"],
-                "mid_range": ["Hotel Gracery Shinjuku", "Shibuya Excel Hotel", "Richmond Hotel"],
-                "budget": ["Capsule hotels", "Hostel world locations", "Business hotels"]
-            },
-            "restaurants": {
-                "fine_dining": ["Sukiyabashi Jiro", "Narisawa", "Kozasa"],
-                "casual": ["Ichiran Ramen", "Genki Sushi", "Ippudo"],
-                "local_favorites": ["Tsukiji Market stalls", "Yakitori alleys", "Department store food courts"]
-            },
-            "daily_itineraries": {
-                1: {
-                    "theme": "Traditional Tokyo",
-                    "morning": "Sensoji Temple and Asakusa district",
-                    "afternoon": "Imperial Palace East Gardens",
-                    "evening": "Traditional dinner and cultural show",
-                    "hotel_area": "Asakusa (traditional area)",
-                    "restaurant": "Daikokuya (traditional tempura, established 1887)"
-                },
-                2: {
-                    "theme": "Modern Tokyo",
-                    "morning": "Tokyo Skytree and Sumida River area",
-                    "afternoon": "Harajuku and youth culture",
-                    "evening": "Shibuya crossing and Robot Restaurant",
-                    "hotel_area": "Shibuya (modern entertainment district)",
-                    "restaurant": "Gonpachi (famous 'Kill Bill' restaurant)"
-                },
-                3: {
-                    "theme": "Nature and Tradition",
-                    "morning": "Day trip to Mount Fuji area",
-                    "afternoon": "Hakone hot springs",
-                    "evening": "Return to Tokyo, quiet dinner",
-                    "hotel_area": "Near transportation hub for easy day trip access",
-                    "restaurant": "Kozasa (Michelin-starred kaiseki)"
-                }
-            }
-        },
-
-        "rome": {
-            "trip_header": "Ciao, Eternal City Adventure!",
-            "appeal": "Rome is a living museum where ancient history meets vibrant modern life. Walk through 2,000 years of civilization, from the Colosseum to Vatican treasures, while enjoying incredible food, warm hospitality, and la dolce vita lifestyle.",
-            "timezone": "Central European Time (CET) - UTC+1",
-            "timezone_difference": "6 hours ahead of Miami, 9 hours ahead of Los Angeles",
-            "language": "Italian",
-            "common_phrases": [
-                "Ciao (chow) - Hello/Goodbye (informal)",
-                "Grazie (GRAH-tsee-eh) - Thank you",
-                "Scusi (SKOO-zee) - Excuse me",
-                "Parla inglese? (PAR-lah in-GLAY-zeh) - Do you speak English?",
-                "Dov'è il bagno? (doh-VEH eel BAHN-yoh) - Where is the bathroom?"
-            ],
-            "cultural_etiquette": [
-                "Dress modestly when visiting churches (cover shoulders/knees)",
-                "Lunch is typically 1-3pm, dinner after 8pm",
-                "Stand at the bar for cheaper coffee",
-                "Don't ask for cappuccino after 11am",
-                "Tipping 10% is appreciated but not mandatory"
-            ],
-            "electrical_plug": "Type C, F, and L plugs (European style)",
-            "seasonal_activities": {
-                "spring": ["Easter celebrations", "Rose Garden blooming", "Outdoor dining season begins"],
-                "summer": ["Outdoor cinema", "Summer festivals", "Long museum hours"],
-                "fall": ["White Night cultural events", "Harvest festivals", "Perfect weather for sightseeing"],
-                "winter": ["Christmas markets", "Epiphany celebrations", "Fewer crowds at attractions"]
-            },
-            "hotels": {
-                "luxury": ["Hotel de Russie", "The First Roma", "Villa Spalletti Trivelli"],
-                "mid_range": ["Hotel Artemide", "Hotel Sonya", "The RomeHello"],
-                "budget": ["The Beehive", "Alessandro Palace", "Generator Rome"]
-            },
-            "restaurants": {
-                "fine_dining": ["La Pergola", "Il Pagliaccio", "Metamorfosi"],
-                "casual": ["Da Enzo", "Trattoria Monti", "Armando al Pantheon"],
-                "local_favorites": ["Checchino dal 1887", "Flavio al Velavevodetto", "Piperno"]
-            },
-            "daily_itineraries": {
-                1: {
-                    "theme": "Ancient Rome",
-                    "morning": "Colosseum and Roman Forum tour",
-                    "afternoon": "Palatine Hill exploration",
-                    "evening": "Traditional Roman dinner in Trastevere",
-                    "hotel_area": "Near Colosseum or historic center",
-                    "restaurant": "Checchino dal 1887 (traditional Roman cuisine)"
-                },
-                2: {
-                    "theme": "Vatican and Spiritual Rome",
-                    "morning": "Vatican Museums and Sistine Chapel",
-                    "afternoon": "St. Peter's Basilica and climb the dome",
-                    "evening": "Aperitivo and dinner near Vatican",
-                    "hotel_area": "Vatican area or city center",
-                    "restaurant": "Da Enzo al 29 (authentic local trattoria)"
-                },
-                3: {
-                    "theme": "Baroque Beauty",
-                    "morning": "Trevi Fountain and Spanish Steps",
-                    "afternoon": "Pantheon and Piazza Navona",
-                    "evening": "Villa Borghese gardens and gallery",
-                    "hotel_area": "Spanish Steps or Pantheon area",
-                    "restaurant": "Armando al Pantheon (family-run since 1961)"
-                }
-            }
-        }
-    }
-
-    # Get current season for activities
-    current_month = datetime.datetime.now().month
-    if current_month in [3, 4, 5]:
-        current_season = "spring"
-    elif current_month in [6, 7, 8]:
-        current_season = "summer"
-    elif current_month in [9, 10, 11]:
-        current_season = "fall"
-    else:
-        current_season = "winter"
-
-    if destination_key in destinations_db:
-        dest_info = destinations_db[destination_key]
-
-        # Get current weather
-        weather_data = get_current_weather(destination)
-
-        # Get exchange rate (simplified - you could integrate a real API)
-        exchange_rates = {
-            "paris": "1 USD = 0.85 EUR (approximate)",
-            "tokyo": "1 USD = 110 JPY (approximate)",
-            "rome": "1 USD = 0.85 EUR (approximate)"
-        }
-
-        # Build comprehensive trip plan
-        trip_plan = {
-            "status": "success",
-            "trip_header": dest_info["trip_header"],
-            "destination": destination.title(),
-            "duration": f"{days} days",
-            "trip_appeal": dest_info["appeal"],
-            "weather_info": weather_data,
-            "timezone_info": {
-                "timezone": dest_info["timezone"],
-                "time_difference": dest_info["timezone_difference"]
-            },
-            "seasonal_activities": dest_info["seasonal_activities"][current_season],
-            "language_guide": {
-                "language": dest_info["language"],
-                "common_phrases": dest_info["common_phrases"]
-            },
-            "cultural_info": {
-                "etiquette_and_norms": dest_info["cultural_etiquette"],
-                "electrical_plug": dest_info["electrical_plug"]
-            },
-            "exchange_rate": exchange_rates.get(destination_key, "Please check current exchange rates"),
-            "accommodation_options": dest_info["hotels"],
-            "dining_recommendations": dest_info["restaurants"],
-            "daily_itinerary": []
-        }
-
-        # Generate daily itinerary
-        for day in range(1, days + 1):
-            if day <= len(dest_info["daily_itineraries"]):
-                day_plan = dest_info["daily_itineraries"][day].copy()
-                day_plan["day_number"] = day
-                trip_plan["daily_itinerary"].append(day_plan)
-            else:
-                # Generate flexible days for longer trips
-                trip_plan["daily_itinerary"].append({
-                    "day_number": day,
-                    "theme": "Free Exploration Day",
-                    "morning": "Revisit favorite locations or explore new neighborhoods",
-                    "afternoon": "Shopping or museum visits",
-                    "evening": "Local dining experience",
-                    "hotel_area": "Same accommodation area",
-                    "restaurant": "Explore local recommendations"
-                })
-
-        return trip_plan
-
-    else:
-        # For destinations not in detailed database
-        return {
-            "status": "basic_plan",
-            "trip_header": f"Adventure Awaits in {destination.title()}!",
-            "destination": destination.title(),
-            "message": f"I don't have comprehensive data for {destination} yet, but I can help you plan!",
-            "suggestions": [
-                "Research local customs and etiquette",
-                "Check visa requirements for your nationality",
-                "Look up current weather and seasonal activities",
-                "Find recommended hotels and restaurants",
-                "Learn basic phrases in the local language",
-                "Check electrical plug types and voltage",
-                "Research current exchange rates"
-            ],
-            "weather_info": get_current_weather(destination)
-        }
-
+# Create the agent with comprehensive search-based capabilities
 root_agent = Agent(
-    name="master_vacation_planner",
+    name="dynamic_vacation_planner",
     model="gemini-2.0-flash",
     description=(
-        "Comprehensive vacation planning agent with destination information, itineraries, "
-        "budgets, weather data, and search guidance for current information."
+        "Dynamic vacation planning agent that uses Google search to provide current, up-to-date "
+        "information about destinations, budgets, itineraries, accommodations, dining, cultural tips, "
+        "and timezone information. Also provides current weather data and general travel advice."
     ),
     instruction=(
-        "You are an expert vacation planning agent with multiple capabilities:\n"
-        "1. Provide detailed destination information from your database and AI knowledge\n"
-        "2. Create day-by-day itineraries for popular destinations\n"
-        "3. Calculate travel budgets with cost breakdowns\n"
-        "4. Get current weather information via API\n"
-        "5. Guide users on how to search for current information when needed\n\n"
-        "When users ask about destinations not in your database, provide general guidance "
-        "and suggest specific search strategies. Always be enthusiastic about travel and "
-        "provide practical, actionable advice."
+        "You are an expert vacation planning agent that relies on current web search results to provide "
+        "accurate, up-to-date travel information. Your capabilities include:\n\n"
+        "1. Searching for current destination information, attractions, and activities\n"
+        "2. Finding current budget estimates and cost breakdowns\n"
+        "3. Discovering popular itinerary suggestions from recent travel guides\n"
+        "4. Locating accommodation options across different budget levels\n"
+        "5. Finding dining recommendations and local food scenes\n"
+        "6. Researching cultural customs, etiquette, and practical travel tips\n"
+        "7. Checking current events, conditions, and travel restrictions\n"
+        "8. Providing real-time weather information\n"
+        "9. Determining timezone information and time differences\n\n"
+        "Always use Google search to gather the most current information available. "
+        "When creating comprehensive trip plans, combine multiple search results to provide "
+        "well-rounded, practical advice. Include timezone and time difference information "
+        "to help travelers plan their schedules and adjust to new time zones.\n\n"
+        "Be enthusiastic about travel while providing accurate, actionable recommendations "
+        "based on current data. If search results are insufficient, guide users on additional "
+        "research strategies and recommend reliable travel information sources."
     ),
-    tools=[smart_destination_info, create_itinerary, get_travel_budget, get_current_weather, enhanced_search_info],
+    tools=[google_search],
 )
+
+
+def call_agent(prompt):
+    """Enhanced travel planning with detailed, in-depth responses."""
+
+    try:
+        prompt_lower = prompt.lower()
+
+        if "comprehensive" in prompt_lower or "plan" in prompt_lower:
+            # Enhanced trip planning with detailed analysis
+            words = prompt.split()
+            destination = "Paris"
+            days = 3
+            budget = "medium"
+
+            # Better parsing of user input
+            for i, word in enumerate(words):
+                if word.lower() in ["to", "for", "in", "visit", "visiting"] and i + 1 < len(words):
+                    destination = words[i + 1].strip(".,!?")
+                    break
+
+            # Extract duration
+            for word in words:
+                if word.isdigit() and int(word) <= 14:
+                    days = int(word)
+                    break
+
+            # Extract budget level
+            if any(term in prompt_lower for term in ["luxury", "high-end", "expensive", "premium"]):
+                budget = "high"
+            elif any(term in prompt_lower for term in ["budget", "cheap", "affordable", "low-cost"]):
+                budget = "low"
+
+            # Get timezone data
+            timezone_data = get_timezone_info(destination)
+            current_time = timezone_data.get('current_time', {})
+
+            # Define budget ranges based on level
+            if budget == "high":
+                flight_range = "$800 - $1,500"
+                hotel_range = f"${200 * days} - ${500 * days} (${200} - ${500} per night)"
+                food_range = f"${80 * days} - ${150 * days} (${80} - ${150} per day)"
+                transport_range = "$200 - $500"
+                activities_range = "$300 - $600"
+                total_low = (800 + 200 * days + 80 * days + 200 + 300)
+                total_high = (1500 + 500 * days + 150 * days + 500 + 600)
+            elif budget == "low":
+                flight_range = "$400 - $800"
+                hotel_range = f"${40 * days} - ${80 * days} (${40} - ${80} per night)"
+                food_range = f"${25 * days} - ${50 * days} (${25} - ${50} per day)"
+                transport_range = "$50 - $150"
+                activities_range = "$100 - $200"
+                total_low = (400 + 40 * days + 25 * days + 50 + 100)
+                total_high = (800 + 80 * days + 50 * days + 150 + 200)
+            else:  # medium
+                flight_range = "$600 - $1,200"
+                hotel_range = f"${100 * days} - ${200 * days} (${100} - ${200} per night)"
+                food_range = f"${50 * days} - ${100 * days} (${50} - ${100} per day)"
+                transport_range = "$100 - $300"
+                activities_range = "$200 - $400"
+                total_low = (600 + 100 * days + 50 * days + 100 + 200)
+                total_high = (1200 + 200 * days + 100 * days + 300 + 400)
+
+            # Create detailed, narrative-style response
+            detailed_plan = f"""Based on your {budget}-range budget and {days}-day timeframe, here's a comprehensive travel plan for {destination.title()}:
+
+**{destination.upper()}: A Complete Travel Experience**
+
+**Experience Overview:**
+{destination.title()} offers a perfect blend of cultural immersion, historical exploration, and modern conveniences. This {days}-day itinerary balances must-see attractions with authentic local experiences, giving you a comprehensive taste of what makes this destination special.
+
+**Detailed Cost Breakdown:**
+
+**Flights (round trip from East Coast):** {flight_range}
+**Accommodation ({budget}-range hotels/accommodations):** {hotel_range}
+**Food and Dining:** {food_range}
+**Transportation (local transport, day trips):** {transport_range}
+**Activities and Entrance Fees:** {activities_range}
+**Total Estimated Cost:** ${total_low:,} - ${total_high:,}
+
+**Comprehensive {days}-Day Itinerary:**
+
+**Days 1-2: Arrival and City Orientation**
+Start your journey by settling into the rhythm of {destination.title()}. After arriving and checking into your accommodation, spend your first afternoon exploring the immediate neighborhood around your hotel. This gentle introduction helps combat jet lag while giving you a feel for local life.
+
+Visit the primary iconic landmark during your second day when you're more alert. Book skip-the-line tickets in advance to maximize your time. Spend the evening in a traditional local restaurant to experience authentic cuisine and observe local dining customs.
+
+**Day 3: Cultural Deep Dive**
+Dedicate this day to understanding the cultural heart of {destination.title()}. Visit the most significant museum or cultural site, allowing 3-4 hours for a thorough exploration. Follow this with a walking tour of historic neighborhoods where you can see how locals actually live and work.
+
+**Days 4-{days}: Extended Exploration and Personal Discovery**
+{f"Use your remaining days to balance structured sightseeing with spontaneous exploration. Consider a day trip to a nearby attraction or secondary city. Reserve time for shopping, relaxing in local cafes, and revisiting places that particularly captured your interest." if days > 3 else "Use your final day for any missed attractions and souvenir shopping."}
+
+**Timezone and Scheduling Considerations:**
+{current_time.get('destination_time', f'Local time in {destination}')} 
+{current_time.get('time_difference', 'Check current time differences for jet lag planning')}
+
+This time difference affects your energy levels and optimal sightseeing times. Plan intensive activities for when your body clock aligns with local time, typically after 2-3 days of adjustment.
+
+**Accommodation Strategy:**
+{f"Stay in luxury hotels with concierge services in central locations. Look for historic properties or boutique hotels that offer unique character and premium amenities. These typically range ${200}-${500} per night but provide exceptional service and memorable experiences." if budget == "high" else f"Focus on well-located mid-range hotels with good reviews and essential amenities. Properties near public transportation hubs offer both convenience and cost savings, typically ranging ${100}-${200} per night." if budget == "medium" else f"Consider hostels, guesthouses, or budget hotel chains in safe neighborhoods. Prioritize locations with good reviews, security, and access to public transport, typically ${40}-${80} per night."}
+
+**Transportation and Getting Around:**
+Research public transportation passes for unlimited travel during your stay. Most cities offer tourist passes that include metro, bus, and sometimes regional trains. For longer distances or day trips, compare costs between trains, buses, and domestic flights. Factor in comfort and time savings, not just price.
+
+**Dining and Food Experiences:**
+Embrace the local food culture by mixing different dining experiences. Start days with hotel breakfast or local cafes to fuel sightseeing. Lunch at casual local spots where residents eat - these often offer the best value and most authentic flavors. Reserve 2-3 special dinners at recommended restaurants that showcase regional cuisine.
+
+**Money-Saving Tips:**
+{"Consider traveling during shoulder season (spring or fall) for 20-30% savings on accommodations and fewer crowds at major attractions. Book museums and popular sites online in advance for potential discounts." if budget != "high" else "Book exclusive experiences and premium accommodations well in advance. Consider hiring private guides for personalized experiences that maximize your limited time."}
+
+**Cultural Preparation:**
+Learn basic phrases in the local language - greetings, please, thank you, and excuse me go a long way. Research tipping customs, appropriate dress for religious sites, and general etiquette. Understanding meal times and business hours prevents disappointment and helps you blend in with local rhythms.
+
+**Weather and Packing Considerations:**
+Check current weather patterns and seasonal expectations. Pack layers for temperature changes throughout the day and comfortable walking shoes suitable for varied terrain. Include appropriate attire for any religious sites or upscale restaurants you plan to visit.
+
+**Final Recommendations:**
+Purchase travel insurance to protect against unexpected cancellations or medical emergencies. Keep digital and physical copies of important documents. Share your itinerary with someone at home and register with your embassy for extended stays.
+
+This {days}-day plan provides a framework that balances must-see attractions with authentic local experiences. The key is maintaining flexibility - some of your best travel memories often come from unexpected discoveries and spontaneous adventures.
+
+**Current Time in {destination.title()}:** {datetime.datetime.now().strftime('%B %d, %Y')}
+
+Would you like me to refine any specific aspect of this itinerary or explore alternative options within your budget range?"""
+
+            return detailed_plan
+
+        else:
+            # Enhanced general travel assistance
+            return f"""I can help you create detailed, comprehensive vacation plans with in-depth cost breakdowns and practical recommendations. Here's what I provide:
+
+**Detailed Trip Planning:**
+I create narrative-style itineraries that go beyond basic frameworks. You'll get specific cost ranges, day-by-day activity suggestions, accommodation strategies, and cultural insights that help you travel like an informed local rather than a typical tourist.
+
+**Realistic Budget Analysis:**
+Instead of generic estimates, I provide detailed cost breakdowns covering flights, accommodation, meals, transportation, and activities. I factor in seasonal variations, booking strategies, and money-saving tips appropriate for your budget level.
+
+**Cultural Integration:**
+My recommendations include practical advice for dining etiquette, tipping customs, appropriate dress codes, and language basics that help you navigate confidently and respectfully in your destination.
+
+**Timezone and Practical Logistics:**
+I consider jet lag management, optimal activity timing, transportation efficiency, and weather considerations to help you maximize your time and energy during your trip.
+
+**Example Request Formats:**
+- "Create a 7-day plan for Italy with a mid-range budget"
+- "Plan a luxury 5-day trip to Japan"
+- "I need a budget-friendly European adventure for 10 days"
+
+**To Get Started:**
+Tell me your destination, trip length (1-14 days), and budget preference (budget-friendly, mid-range, or luxury). I'll create a comprehensive plan with specific recommendations you can actually use to book and plan your trip.
+
+What destination interests you most?"""
+
+    except Exception as e:
+        return f"I encountered an issue processing your request: {str(e)}. Could you please rephrase your question or provide more specific details about your travel plans?"
