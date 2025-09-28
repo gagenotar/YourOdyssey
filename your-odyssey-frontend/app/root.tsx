@@ -8,7 +8,10 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import "./app.css";
+
+// Import styles
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/index.css";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,8 +44,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+import Navigation from './components/Navigation';
+import { Auth0ProviderWithNavigate } from './components/auth/Auth0Provider';
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <Auth0ProviderWithNavigate>
+      <div className="app">
+        <Navigation />
+        <main className="container">
+          <Outlet />
+        </main>
+      </div>
+    </Auth0ProviderWithNavigate>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

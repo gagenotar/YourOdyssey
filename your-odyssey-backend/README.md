@@ -1,83 +1,57 @@
 # YourOdyssey Backend
 
 This is the Django backend for the YourOdyssey project.
+````markdown
+# YourOdyssey Backend (Flask)
+
+This repo runs a small Flask backend that provides the travel AI endpoints used by the frontend.
 
 ## Prerequisites
 
 - Python 3.12 or higher
 - pip (Python package installer)
 
-## Setup Instructions
+## Setup & Run (local)
 
-1. Create a virtual environment:
+1. Create and activate a virtual environment:
    ```bash
-   # Navigate to the project root
-   cd YourOdyssey
-
-   # Create virtual environment
+   cd /path/to/YourOdyssey
    python3 -m venv .venv
-   ```
-
-2. Activate the virtual environment:
-   ```bash
-   # On Linux/macOS
    source .venv/bin/activate
-
-   # On Windows
-   .venv\Scripts\activate
    ```
 
-3. Install dependencies:
+2. Install dependencies:
    ```bash
-   # Navigate to the backend directory
    cd your-odyssey-backend
-
-   # Install required packages
    pip install -r requirements.txt
    ```
 
-4. Run migrations:
-   ```bash
-   python manage.py migrate
+3. Provide your Gemini API key in a `.env` file at the backend root:
+   ```ini
+   GEMINI_API_KEY=your_api_key_here
    ```
 
-5. Start the development server:
+4. Start the Flask server:
    ```bash
-   python manage.py runserver
+   # Development
+   python flask_app.py
    ```
 
-The server will start at http://localhost:8000
+The server will start at http://localhost:5000 by default.
 
-## Development
+## API Endpoints (matching the frontend client)
 
-- The API will be available at http://localhost:8000/api/
-- Admin interface is available at http://localhost:8000/admin/
-- Health check endpoint: http://localhost:8000/api/health/
+- `POST /generate_itinerary` — body: { destination, duration, preferences, budget, departure_location }
+- `POST /ask_question` — body: { question }
+- `GET /health` — returns basic health info
 
+## Docker
+
+The project's `Dockerfile` runs `flask_app.py` by default. Build and run as you normally would for a Python service.
+
+## Notes
+
+- Django files were removed to simplify this hackathon backend. The travel AI logic is in `trip_planner/agent.py` and the webserver entrypoint is `flask_app.py`.
+
+````
 ## API Endpoints
-
-- `GET /api/health/`: Check if the backend is running
-
-## CORS Configuration
-
-The backend is configured to accept requests from:
-- http://localhost:5173 (Vite default dev server)
-- http://localhost:5174 (Alternative Vite port)
-
-## Common Issues
-
-1. **ModuleNotFoundError: No module named 'django'**
-   - Make sure you've activated the virtual environment
-   - Try reinstalling dependencies: `pip install -r requirements.txt`
-
-2. **Port already in use**
-   - You can use a different port: `python manage.py runserver 8001`
-
-## Maintaining Dependencies
-
-When adding new Python packages:
-1. Install them with pip while virtual environment is active
-2. Update requirements.txt:
-   ```bash
-   pip freeze > requirements.txt
-   ```

@@ -1,0 +1,154 @@
+.container {
+  padding: 8px 0;
+}
+
+.header {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.destination {
+  margin: 0;
+}
+
+.sub {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.section {
+  margin-bottom: 18px;
+  padding-bottom: 6px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin-top: 8px;
+  align-items: start;
+}
+
+/* Make each grid cell a label/value row so labels align across the grid */
+.infoGrid > div {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+
+.infoGrid > div strong {
+  display: inline-block;
+  width: 140px; /* fixed label width for alignment */
+  flex: 0 0 140px;
+}
+
+.objectList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.objectRow {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.objectRow strong {
+  display: inline-block;
+  width: 140px; /* fixed label width for alignment */
+}
+
+.objectValue {
+  color: #333;
+}
+
+.fullWidth {
+  margin-top: 8px;
+  grid-column: 1 / -1;
+}
+
+.priorityList {
+  background: #fff9f2;
+  border-left: 4px solid #ffcf5c;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+}
+
+.priorityList ul {
+  margin: 6px 0 0 18px;
+}
+
+.days {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dayCard {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.dayHeader {
+  margin-bottom: 8px;
+}
+
+.dayTitle {
+  font-weight: 600;
+}
+
+.activity {
+  border-top: 1px dashed #eef2f5;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.activityRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+  .objectRow strong {
+    width: 120px;
+  }
+  .activityRow {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+.activityName {
+  font-weight: 600;
+}
+
+.activityMeta {
+  display: flex;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.activityDesc {
+  margin-top: 6px;
+}
+
+.tips {
+  margin-top: 6px;
+  font-style: italic;
+  color: #444;
+}
+
+.transport {
+  margin-top: 8px;
+  color: #333;
+}
