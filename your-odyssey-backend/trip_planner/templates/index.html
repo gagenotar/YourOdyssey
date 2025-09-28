@@ -1,0 +1,370 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Itinerary Planner</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center">
+                <i class="fas fa-plane mr-2"></i>
+                AI Travel Itinerary Planner
+            </h1>
+            <p class="text-xl text-center mt-2 opacity-90">
+                Powered by Gemini 2.0 Flash with Real-time Google Search
+            </p>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Trip Planning Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-map-marked-alt mr-2 text-blue-600"></i>
+                    Plan Your Perfect Trip
+                </h2>
+
+                <form id="itinerary-form" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="destination" class="block text-sm font-medium text-gray-700 mb-2">
+                                Destination <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="destination" name="destination"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   placeholder="e.g., Paris, France" required>
+                        </div>
+
+                        <div>
+                            <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">
+                                Duration (days)
+                            </label>
+                            <select id="duration" name="duration"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="3">3 days</option>
+                                <option value="5" selected>5 days</option>
+                                <option value="7">7 days</option>
+                                <option value="10">10 days</option>
+                                <option value="14">14 days</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="budget" class="block text-sm font-medium text-gray-700 mb-2">
+                                Budget Range
+                            </label>
+                            <select id="budget" name="budget"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="budget">Budget (Under $100/day)</option>
+                                <option value="moderate" selected>Moderate ($100-250/day)</option>
+                                <option value="luxury">Luxury ($250+/day)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="preferences" class="block text-sm font-medium text-gray-700 mb-2">
+                                Travel Style
+                            </label>
+                            <select id="preferences" name="preferences"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="cultural and historical">Cultural & Historical</option>
+                                <option value="adventure and outdoor">Adventure & Outdoor</option>
+                                <option value="food and nightlife">Food & Nightlife</option>
+                                <option value="relaxation and wellness">Relaxation & Wellness</option>
+                                <option value="family friendly">Family Friendly</option>
+                                <option value="mix of everything" selected>Mix of Everything</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                        <i class="fas fa-magic mr-2"></i>
+                        Generate My Itinerary
+                    </button>
+                </form>
+            </div>
+
+            <!-- Travel Q&A Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-question-circle mr-2 text-green-600"></i>
+                    Ask Travel Questions
+                </h2>
+
+                <div class="flex space-x-2">
+                    <input type="text" id="travel-question"
+                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                           placeholder="Ask me anything about travel...">
+                    <button id="ask-question-btn"
+                            class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="question-answer" class="mt-4 hidden">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="font-semibold text-gray-700 mb-2">Answer:</h3>
+                        <div id="answer-content" class="text-gray-600"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">
+                    <i class="fas fa-search mr-2"></i>
+                    Searching for the best travel information and creating your personalized itinerary...
+                </p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <div class="flex">
+                    <div class="py-1">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                    </div>
+                    <div id="error-content"></div>
+                </div>
+            </div>
+
+            <!-- Itinerary Results -->
+            <div id="itinerary-results" class="hidden">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            <i class="fas fa-calendar-alt mr-2 text-purple-600"></i>
+                            Your Personalized Itinerary
+                        </h2>
+                        <button id="export-itinerary"
+                                class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <i class="fas fa-download mr-2"></i>
+                            Export
+                        </button>
+                    </div>
+
+                    <div id="itinerary-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('itinerary-form');
+            const loading = document.getElementById('loading');
+            const errorMessage = document.getElementById('error-message');
+            const results = document.getElementById('itinerary-results');
+            const itineraryContent = document.getElementById('itinerary-content');
+
+            // Handle itinerary form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const data = {
+                    destination: formData.get('destination'),
+                    duration: parseInt(formData.get('duration')),
+                    budget: formData.get('budget'),
+                    preferences: formData.get('preferences')
+                };
+
+                // Show loading, hide other elements
+                loading.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+                results.classList.add('hidden');
+
+                try {
+                    const response = await fetch('/generate_itinerary', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    loading.classList.add('hidden');
+
+                    if (result.success) {
+                        displayItinerary(result.itinerary, result.destination, result.duration);
+                        results.classList.remove('hidden');
+                    } else {
+                        showError(result.error || 'Failed to generate itinerary');
+                    }
+                } catch (error) {
+                    loading.classList.add('hidden');
+                    showError('Network error: ' + error.message);
+                }
+            });
+
+            // Handle travel questions
+            const questionInput = document.getElementById('travel-question');
+            const askButton = document.getElementById('ask-question-btn');
+            const questionAnswer = document.getElementById('question-answer');
+            const answerContent = document.getElementById('answer-content');
+
+            async function askQuestion() {
+                const question = questionInput.value.trim();
+                if (!question) return;
+
+                askButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                askButton.disabled = true;
+
+                try {
+                    const response = await fetch('/ask_question', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({question: question})
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        answerContent.innerHTML = formatAnswer(result.answer);
+                        questionAnswer.classList.remove('hidden');
+                    } else {
+                        showError(result.error || 'Failed to get answer');
+                    }
+                } catch (error) {
+                    showError('Network error: ' + error.message);
+                } finally {
+                    askButton.innerHTML = '<i class="fas fa-search"></i>';
+                    askButton.disabled = false;
+                }
+            }
+
+            askButton.addEventListener('click', askQuestion);
+            questionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    askQuestion();
+                }
+            });
+
+            function formatAnswer(answer) {
+                // Basic formatting for the answer
+                return answer
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>')
+                    .replace(/^\s*/, '<p>')
+                    .replace(/\s*$/, '</p>');
+            }
+
+            function showError(message) {
+                document.getElementById('error-content').textContent = message;
+                errorMessage.classList.remove('hidden');
+            }
+
+            function displayItinerary(itinerary, destination, duration) {
+                let html = `
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800">${destination}</h3>
+                        <p class="text-gray-600">${duration} days of amazing experiences</p>
+                    </div>
+                `;
+
+                itinerary.forEach(day => {
+                    html += `
+                        <div class="mb-8 border-l-4 border-blue-500 pl-6">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                                    <i class="fas fa-calendar-day mr-2 text-blue-600"></i>
+                                    ${day.date} - ${day.theme}
+                                </h3>
+                                ${day.transportation_notes ? `<p class="text-sm text-gray-600 mb-3"><i class="fas fa-bus mr-1"></i> ${day.transportation_notes}</p>` : ''}
+                            </div>
+
+                            <div class="grid gap-4">
+                                ${day.activities.map(activity => `
+                                    <div class="card-hover bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="font-semibold text-gray-800">${activity.name}</h4>
+                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${activity.category}</span>
+                                        </div>
+
+                                        <p class="text-gray-600 mb-2">${activity.description}</p>
+
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-gray-500">
+                                            <div><i class="fas fa-map-marker-alt mr-1"></i> ${activity.location}</div>
+                                            <div><i class="fas fa-clock mr-1"></i> ${activity.duration}</div>
+                                            <div><i class="fas fa-dollar-sign mr-1"></i> ${activity.estimated_cost}</div>
+                                            ${activity.rating ? `<div><i class="fas fa-star mr-1"></i> ${activity.rating}</div>` : ''}
+                                        </div>
+
+                                        ${activity.opening_hours ? `<div class="text-sm text-gray-500 mt-1"><i class="fas fa-info-circle mr-1"></i> Hours: ${activity.opening_hours}</div>` : ''}
+
+                                        ${activity.tips ? `
+                                            <div class="mt-2 p-2 bg-yellow-50 border-l-2 border-yellow-400">
+                                                <p class="text-sm text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> ${activity.tips}</p>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <div class="mt-4 text-right">
+                                <span class="font-semibold text-gray-700">
+                                    Daily Budget: ${day.total_estimated_cost}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                itineraryContent.innerHTML = html;
+            }
+
+            // Export functionality
+            document.getElementById('export-itinerary').addEventListener('click', function() {
+                const itineraryText = document.getElementById('itinerary-content').innerText;
+                const blob = new Blob([itineraryText], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'travel-itinerary.txt';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>
